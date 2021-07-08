@@ -17,12 +17,17 @@ namespace InterviewProblem
         const string searchKey = "e43cf40f26be9ddbd";
 
         public string wordSearch;
+        public string title;
+        public string description;
         public List<String> imgList {get; set;}
         public ImageList image { get; set; }
 
-        public Form2()
+        // initializing and getting the title from form 1
+        public Form2(string title_val, string descr_val)
         {
             InitializeComponent();
+            titleLabel.Text = title_val;
+            descrText.Text = descr_val;
         }
 
         private void Form2_Load(object sender, EventArgs e)
@@ -36,7 +41,7 @@ namespace InterviewProblem
             // .Q is the search query. Word we are searching for
             listRequest.Q = wordSearch;
             // how many requests we are making. default 10
-            listRequest.Num = 5;
+            listRequest.Num = 9;
             // search id 
             listRequest.Cx = searchKey;
             // searching for image type only
@@ -74,27 +79,44 @@ namespace InterviewProblem
 
             // have to call the microsoft library for application since forms and the microsoft library both use Application. Just need to specify
             Microsoft.Office.Interop.PowerPoint.Application pptApplication = new Microsoft.Office.Interop.PowerPoint.Application();
+
             Presentation pptPresentation = pptApplication.Presentations.Add(Microsoft.Office.Core.MsoTriState.msoTrue);
 
-            for(var i = 0; i < imgList.Count; i++)
+            for (var i = 0; i < imgList.Count; i++)
             {
                 // creating my powerpoint with slides and text
                 Microsoft.Office.Interop.PowerPoint.Slides slides;
                 Microsoft.Office.Interop.PowerPoint.Slide slide;
                 Microsoft.Office.Interop.PowerPoint.TextRange objText;
+                Microsoft.Office.Interop.PowerPoint.TextRange descrText;
 
                 Microsoft.Office.Interop.PowerPoint.CustomLayout custLayout= pptPresentation.SlideMaster.CustomLayouts[Microsoft.Office.Interop.PowerPoint.PpSlideLayout.ppLayoutText];
 
                 slides = pptPresentation.Slides;
                 slide = slides.AddSlide(i + 1, custLayout);
                 objText = slide.Shapes[1].TextFrame.TextRange;
-                objText.Text = "";
+                descrText = slide.Shapes[2].TextFrame.TextRange;
 
+                // here is where i added the title to the powerpoint
+                objText.Text = title;
+                // here is where i added the description to the powerpoint
+                descrText.Text = description;
+                
                 Microsoft.Office.Interop.PowerPoint.Shape shape = slide.Shapes[2];
                 slide.Shapes.AddPicture(imgList[i], Microsoft.Office.Core.MsoTriState.msoFalse,
                     Microsoft.Office.Core.MsoTriState.msoTrue, shape.Left, shape.Top, shape.Width, shape.Height);
             }
             pptPresentation.SaveAs(@"C:\powerpoint\newPpt.pptx", Microsoft.Office.Interop.PowerPoint.PpSaveAsFileType.ppSaveAsDefault, Microsoft.Office.Core.MsoTriState.msoTrue);
+        }
+
+        private void imgView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void titleLabel_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

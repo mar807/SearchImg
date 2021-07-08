@@ -5,7 +5,11 @@ using System.Windows.Forms;
 // make a form -- DONE
 // allow title and text input -- DONE
 // search images using Google API -- DONE
-// display in powerpoint
+// display in powerpoint -- DONE
+// include title on form 2 -- DONE
+// Title being included in powerpoint -- DONE
+// Bold the description -- DONE 
+// Description being added to powerpoint and form 2 
 
 namespace InterviewProblem
 {
@@ -26,12 +30,18 @@ namespace InterviewProblem
         {
             // getting user input text, then going to use wordSearch to search for images
             string wordSearch = textTxt.Text;
-            using (Form2 f2 = new Form2())
+            string title = titleTxt.Text;
+
+            // passing the title text box to the second form that holds the google pictures
+            using (Form2 f2 = new Form2(titleTxt.Text, descrBox.Text))
             {
                 // passing the value from the first form to the second form
+                f2.title = titleTxt.Text;
                 f2.wordSearch = textTxt.Text;
                 f2.ShowDialog();
             }
         }
+
+
     }
 }
